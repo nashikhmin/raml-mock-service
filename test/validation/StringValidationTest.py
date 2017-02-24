@@ -1,6 +1,6 @@
 import unittest
 
-from validator import Validator
+from server.validator import Validator
 
 
 class StringValidationTest(unittest.TestCase):

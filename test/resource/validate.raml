@@ -6,7 +6,6 @@ version: v1
 
 /string:
   get:
-    description: Methods for testing string.
     queryParameters:
       all:
         type: string
@@ -27,7 +26,6 @@ version: v1
 
 /number:
   get:
-    description: Methods for testing string.
     queryParameters:
       max:
         type: number
@@ -37,3 +35,23 @@ version: v1
         minimum: 0
       number:
         type: number
+
+/integer:
+  get:
+    queryParameters:
+      max:
+        type: number
+        maximum: 10
+      min:
+        type: number
+        minimum: 0
+      integer:
+        type: number
+
+/required:
+    get:
+        queryParameters:
+            a:
+                required: true
+            b:
+                required: true

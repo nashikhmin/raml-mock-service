@@ -22,7 +22,13 @@ class Validator:
             t_arg = self.get_template_argument(arg)
             if t_arg:
                 self.validate_argument(input[arg], t_arg)
-                # TODO add checking required params
+
+        self.validate_required_components(input)
+
+    def validate_required_components(self, input):
+        for t_arg in self.arguments:
+            if t_arg.required and t_arg.name not in input:
+                raise Exception(message.ERR_REQUIRED_ARGUMENT)
 
     def validate_argument(self, value, params):
         if params.type == 'string':
@@ -41,7 +47,7 @@ class Validator:
             pass
 
     def resolve_bool(raw_value, param):
-        #TODO
+        # TODO
         pass
 
     def resolve_file(raw_value, param):
@@ -53,7 +59,7 @@ class Validator:
         pass
 
     def resolve_date(raw_value, param):
-        #TODO
+        # TODO
         pass
 
     def validate_integer(self, value, param):
@@ -61,7 +67,7 @@ class Validator:
             value = int(value)
         except:
             raise Exception(message.ERR_INTEGER)
-        self._validateMinMax(value, param)
+        self._validate_min_max(value, param)
 
     def validate_number(self, value, param):
         try:
@@ -84,4 +90,4 @@ class Validator:
             raise Exception(message.ERR_STRING_MAX)
         if param.enum is not None and value not in param.enum:
             raise Exception(message.ERR_STRING_ENUM)
-        #TODO: validate pattern
+            # TODO: validate pattern
