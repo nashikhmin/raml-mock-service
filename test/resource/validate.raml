@@ -1,0 +1,26 @@
+#%RAML 0.8
+---
+title: ValidationTest
+baseUri: http://test.com
+version: v1
+
+/string:
+  get:
+    description: Methods for testing string.
+    queryParameters:
+      all:
+        type: string
+        enum: ['aaa','bbb','ccc','dddd']
+        minLength: 3
+        maxLength: 5
+      min:
+        type: string
+        minLength: 3
+      max:
+        type: string
+        maxLength: 3
+      pattern:
+        type: string
+      enum:
+        type: string
+        enum: ['aaa','bbb','ccc','dddd']
