@@ -1,3 +1,7 @@
 ERR_STRING_MIN = "Argument is less than minimum length"
 ERR_STRING_MAX = "Argument is more than maximum length"
 ERR_STRING_ENUM = "Argument is not in enum"
+ERR_MINIMUM = "Argument is less than minimum"
+ERR_MAXIMUM = "Argument is bigger than maximum"
+ERR_NUMBER = "Argument is not number"
+ERR_INTEGER = "Argument is not integer"

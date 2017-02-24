@@ -24,3 +24,16 @@ version: v1
       enum:
         type: string
         enum: ['aaa','bbb','ccc','dddd']
+
+/number:
+  get:
+    description: Methods for testing string.
+    queryParameters:
+      max:
+        type: number
+        maximum: 10
+      min:
+        type: number
+        minimum: 0
+      number:
+        type: number
