@@ -11,8 +11,8 @@ class Mock:
 
     def start(self, debug=True):
         self._init_url_rules()
-        self.app.run(debug=debug)
-
+        #self.app.run(debug=debug)
+        self.app.run(host='0.0.0.0',debug=debug)
 
     def _init_url_rules(self):
         for resource in self.parser.resources:
