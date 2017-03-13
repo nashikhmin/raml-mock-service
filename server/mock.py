@@ -1,5 +1,5 @@
 import ramlfications
-from flask import Flask, json, request
+from flask import Flask, request
 
 from server.validator import validate
 
@@ -11,17 +11,17 @@ class Mock:
 
     def start(self, debug=True):
         self._init_url_rules()
-        #self.app.run(debug=debug)
-        self.app.run(host='0.0.0.0',debug=debug)
+        # self.app.run(debug=debug)
+        self.app.run(host='0.0.0.0', debug=debug)
 
     def _init_url_rules(self):
         for resource in self.parser.resources:
             self.app.add_url_rule(
-                    rule=self._transrofm_path_raml_to_flask(resource.path) + '/',  # I believe this is the actual url
-                    endpoint=resource.name,  # this is the name used for url_for (from the docs)
-                    view_func=self.get,
-                    defaults={'route': resource.path},
-                    methods=['GET']
+                rule=self._transrofm_path_raml_to_flask(resource.path) + '/',  # I believe this is the actual url
+                endpoint=resource.name,  # this is the name used for url_for (from the docs)
+                view_func=self.get,
+                defaults={'route': resource.path},
+                methods=['GET']
             )
 
     def _transrofm_path_raml_to_flask(self, s):
@@ -40,5 +40,9 @@ class Mock:
         resource = self._get_resource(route)
         validate(request.args, resource.query_params)
         response = self._get_response(resource, 'get')
-        json_answer = next((body.example for body in response.body if body.mime_type == 'application/json'), None)
-        return json.dumps(json_answer)
+        body = next((body for body in response.body if body.mime_type == 'application/json'), None)
+        if (body.schema):
+            json = body.schema
+        else:
+            json = body.example
+        return json.dumps(json)

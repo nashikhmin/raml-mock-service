@@ -1,5 +1,6 @@
 import json
-import random
+
+import server.jsongenerator.utils as utils
 
 
 class JsonGenerator:
@@ -21,25 +22,33 @@ class JsonGenerator:
         return self.get_node(self.data)
 
     def get_node(self, node):
+        # TODO: improve and delete this statement
+        if not 'type' in node:
+            return None
         type = node['type']
-        self._types[type](node)
+        return self._types[type](node)
 
     def get_array(self, node):
-        n = random.randint(self._array_min_count, self._array_max_count)
-        items = [] * n
-        for item in items:
-            item = self.get_node(node['items'])
+        n = utils.generate_number(self._array_min_count, self._array_max_count)
+        items = [self.get_node(node['items']) for _ in range(n)]
         return items
 
     def get_object(self, node):
-        pass
+        object = {}
+        properties = node['properties']
+        for field in properties:
+            object[field] = self.get_node(properties[field])
+        return object
 
     def get_string(self, node):
-        pass
+        return utils.generate_string(10)
 
     def get_number(self, node):
-        pass
+        return utils.generate_number()
 
 
+def getJson(schema):
+    pass
 generator = JsonGenerator('example.json')
-generator.getJson()
+a = generator.getJson()
+print(a)
