@@ -1,5 +1,7 @@
 import json
 
+import rstr as rstr
+
 import server.jsongenerator.utils as utils
 
 
@@ -7,9 +9,11 @@ class JsonGenerator:
     _array_min_count = 4
     _array_max_count = 10
 
-    def __init__(self, file):
-        json_data = open(file).read()
-        self.data = json.loads(json_data)
+    _default_len_min_string = 3
+    _default_len_max_string = 26
+
+    def __init__(self, schema):
+        self.data = json.loads(schema)
 
         self._types = {
             'object': self.get_object,
@@ -23,13 +27,15 @@ class JsonGenerator:
 
     def get_node(self, node):
         # TODO: improve and delete this statement
-        if not 'type' in node:
+        if 'type' not in node:
             return None
         type = node['type']
+        if isinstance(type, list):
+            return self._types[type[0]](node)
         return self._types[type](node)
 
     def get_array(self, node):
-        n = utils.generate_number(self._array_min_count, self._array_max_count)
+        n = utils.generate_int(self._array_min_count, self._array_max_count)
         items = [self.get_node(node['items']) for _ in range(n)]
         return items
 
@@ -41,14 +47,29 @@ class JsonGenerator:
         return object
 
     def get_string(self, node):
-        return utils.generate_string(10)
+        if "enum" in node:
+            enum = node["enum"]
+            i = utils.generate_int(0, len(enum) - 1)
+            return enum[i]
+
+        min_len = self._default_len_min_string
+        max_len = self._default_len_max_string
+        if "pattern" in node:
+            return rstr.xeger(node['pattern'])
+        if "minLength" in node:
+            min_len = node['minLength']
+            additional_range = 20
+            max_len = min_len + additional_range
+
+        if "maxLength" in node:
+            max_len = node['maxLength']
+
+        return utils.generate_string_between(min_len, max_len)
 
     def get_number(self, node):
-        return utils.generate_number()
+        return utils.generate_int()
 
 
 def getJson(schema):
-    pass
-generator = JsonGenerator('example.json')
-a = generator.getJson()
-print(a)
+    generator = JsonGenerator(schema)
+    return generator.getJson()
