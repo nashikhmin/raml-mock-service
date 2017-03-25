@@ -12,6 +12,7 @@ class JsonGenerator:
     _default_len_min_string = 3
     _default_len_max_string = 26
 
+
     def __init__(self, schema):
         self.data = json.loads(schema)
 
@@ -41,9 +42,21 @@ class JsonGenerator:
 
     def get_object(self, node):
         object = {}
-        properties = node['properties']
+        properties = {}
+        if 'properties' in node:
+            properties=node['properties']
+
+        max_len = None
+
+        if "maxProperties" in node:
+            max_len = node['maxProperties']
+
         for field in properties:
             object[field] = self.get_node(properties[field])
+        if max_len is not None and min_len>len(object):
+            for i in range(min_len-len(object)):
+                object[utils.generate_string(4)]=self.get_string({})
+
         return object
 
     def get_string(self, node):

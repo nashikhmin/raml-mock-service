@@ -7,7 +7,7 @@ def generate_string_between(min_length, max_length):
 
 
 def generate_string(length):
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
+    return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(length))
 
 
 def generate_int(min=0, max=1000):

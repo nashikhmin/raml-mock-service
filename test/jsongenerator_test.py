@@ -2,6 +2,7 @@ import json
 import unittest
 
 from server.jsongenerator.jsongenerator import JsonGenerator
+from jsonschema import validate
 
 
 class MyTestCase(unittest.TestCase):
@@ -57,6 +58,24 @@ class MyTestCase(unittest.TestCase):
         if not isinstance(out, int) and not isinstance(out, str):
             self.fail(str(out) + ' is not number or string type')
 
+    def test_object_clean(self):
+        schema = '{ "type": "object" }'
+        generator = JsonGenerator(schema)
+        out = generator.get_node(json.loads(schema))
+        if not isinstance(out, dict):
+            self.fail(str(out) + ' is not object')
+
+    def test_object_properties(self):
+        schema = '{"type": "object", "properties": {"number":{ "type": "number" }}}'
+        generator = JsonGenerator(schema)
+        out = generator.get_node(json.loads(schema))
+        self.assertEqual(out.keys(), {'number': 12}.keys(), 'there are not properties')
+
+    def test_object_min(self):
+        schema = '{"type": "object","minProperties": 2, "maxProperties": 3}'
+        generator = JsonGenerator(schema)
+        out = generator.get_node(json.loads(schema))
+        self.assertGreaterEqual(len(out.keys()), 2, 'number of properties of ' + str(out) + ' is less than minLength')
 
 if __name__ == '__main__':
     unittest.main()
