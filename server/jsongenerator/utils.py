@@ -16,5 +16,8 @@ def generate_int(min=0, max=1000):
     return random.randint(ceil(min), floor(max))
 
 
+def generate_bool():
+    return bool(random.getrandbits(1))
+
 def generate_float(min=0, max=1000):
     return random.uniform(min, max)

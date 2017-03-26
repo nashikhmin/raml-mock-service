@@ -20,6 +20,22 @@ class CommonGeneratorTestCase(unittest.TestCase):
             self.fail(str(out) + ' is not number or string type')
 
 
+class BooleanGeneratorTestCase(unittest.TestCase):
+    def test_boolean(self):
+        schema = '{ "type": "boolean" }'
+        generator = JsonGenerator(schema)
+        out = generator._get_node(json.loads(schema))
+        self.assertIsInstance(out, bool, str(out) + ' is not boolean')
+
+
+class NullGeneratorTestCase(unittest.TestCase):
+    def test_null(self):
+        schema = '{ "type": "null" }'
+        generator = JsonGenerator(schema)
+        out = generator._get_node(json.loads(schema))
+        self.assertTrue(out is None, str(out) + ' is not null')
+
+
 class StringGeneratorTestCase(unittest.TestCase):
     def test_string(self):
         schema = '{ "type": "string" }'
@@ -56,10 +72,10 @@ class NumberGeneratorTestCase(unittest.TestCase):
         self.assertIsInstance(out, float, str(out) + ' is not number')
 
     def test_number_multiple_of(self):
-        schema = '{ "type": "number","multipleOf" : 3.4 }'
+        schema = '{ "type": "number","minimum": 10, "maximum": 30,"multipleOf" : 10}'
         generator = JsonGenerator(schema)
         out = generator._get_node(json.loads(schema))
-        self.assertAlmostEqual(float(out) / 3.4, int(out / 3.4), str(out) + ' is not multipleOf 3.4', 1e-7)
+        self.assertAlmostEqual(float(out) / 10, int((out + 1e-5) / 10), str(out) + ' is not multipleOf 10', 1e-7)
 
     def test_number_min(self):
         schema = '{ "type": "number", "minimum": 20}'
