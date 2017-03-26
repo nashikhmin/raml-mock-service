@@ -8,6 +8,7 @@ The application works just with RAML 0.8.
 Implemented:
 - GET requests
 - JSON generator(based on JSON schema)
+
 #Planning feature
 - implement POST, PUT, DELETE request
 - implement security checking
