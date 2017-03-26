@@ -9,7 +9,7 @@ Implemented:
 - GET requests
 - JSON generator(based on JSON schema)
 
-#Planning feature
+# Planning feature
 - implement POST, PUT, DELETE request
 - implement security checking
 - add the ability to link files
