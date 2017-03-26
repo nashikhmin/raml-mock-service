@@ -46,14 +46,15 @@ class JsonGenerator:
         if 'properties' in node:
             properties=node['properties']
 
-        max_len = None
+        min_len = None
 
-        if "maxProperties" in node:
-            max_len = node['maxProperties']
+        if "minProperties" in node:
+            min_len = node['maxProperties']
 
         for field in properties:
             object[field] = self.get_node(properties[field])
-        if max_len is not None and min_len>len(object):
+
+        if min_len is not None and min_len>len(object):
             for i in range(min_len-len(object)):
                 object[utils.generate_string(4)]=self.get_string({})
 
