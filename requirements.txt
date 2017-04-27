@@ -1,2 +1,3 @@
 Flask==0.12
 ramlfications==0.1.9
+rstr

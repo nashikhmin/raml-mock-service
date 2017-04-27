@@ -7,9 +7,6 @@ import patch as patch
 import ramlfications
 import sys
 
-import main
-RAML_FILE = "resource/validate.raml"
-parser = ramlfications.parse(RAML_FILE)
 
 
 class TestCommon(unittest.TestCase):

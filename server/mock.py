@@ -3,7 +3,7 @@ import json
 import ramlfications
 from flask import Flask, request
 
-from server.jsongenerator.jsongenerator import getJson
+from server.jsongenerator.jsongenerator import get_json
 from server.validator import validate
 
 
@@ -45,7 +45,7 @@ class Mock:
         json_body = next((body for body in response.body if body.mime_type == 'application/json'), None)
 
         if json_body.schema:
-            result = getJson(json_body.schema)
+            result = get_json(json_body.schema)
         else:
             result = json_body.example
 
