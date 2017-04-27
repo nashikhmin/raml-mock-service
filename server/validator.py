@@ -3,6 +3,8 @@ from common import message
 
 
 def validate(input, expected):
+    if expected is None:
+        return
     validator = Validator(expected)
     validator.validate(input)
 

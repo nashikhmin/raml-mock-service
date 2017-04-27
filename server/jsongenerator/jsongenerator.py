@@ -7,9 +7,8 @@ class JsonGenerator:
     _array_min_count = 4
     _array_max_count = 10
 
-    def __init__(self, file):
-        json_data = open(file).read()
-        self.data = json.loads(json_data)
+    def __init__(self, schema):
+        self.data = schema
 
         self._types = {
             'object': self.get_object,
@@ -48,7 +47,6 @@ class JsonGenerator:
 
 
 def getJson(schema):
-    pass
-generator = JsonGenerator('example.json')
-a = generator.getJson()
-print(a)
+    generator = JsonGenerator(schema)
+    return generator.getJson()
+

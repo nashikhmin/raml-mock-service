@@ -5,6 +5,10 @@ import ramlfications
 from common import message
 from server.validator import Validator
 
+"""
+Tests for module of the program -
+requests parameters validator
+"""
 RAML_FILE = "resource/validate.raml"
 parser = ramlfications.parse(RAML_FILE)
 

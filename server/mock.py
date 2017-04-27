@@ -1,6 +1,9 @@
+import json
+
 import ramlfications
 from flask import Flask, request
 
+from server.jsongenerator.jsongenerator import getJson
 from server.validator import validate
 
 
@@ -9,10 +12,9 @@ class Mock:
         self.parser = ramlfications.parse(raml_file)
         self.app = Flask(__name__)
 
-    def start(self, debug=True):
+    def start(self, port, debug=False):
         self._init_url_rules()
-        # self.app.run(debug=debug)
-        self.app.run(host='0.0.0.0', debug=debug)
+        self.app.run(host='0.0.0.0', port=port, debug=debug)
 
     def _init_url_rules(self):
         for resource in self.parser.resources:
@@ -29,20 +31,22 @@ class Mock:
         s = s.replace('}', '>')
         return s
 
-    def _get_resource(self, route):
+    def _get_endpoint(self, route):
         return next((resource for resource in self.parser.resources if resource.path == route), None)
 
     def _get_response(self, resource, method):
         return next((responce for responce in resource.responses if responce.method == method), None)
 
-    # it is the handler of get requests
+    # handle GET requests
     def get(self, route, **kwargs):
-        resource = self._get_resource(route)
-        validate(request.args, resource.query_params)
-        response = self._get_response(resource, 'get')
-        body = next((body for body in response.body if body.mime_type == 'application/json'), None)
-        if (body.schema):
-            json = body.schema
+        endpoint = self._get_endpoint(route)
+        validate(request.args, endpoint.query_params)
+        response = self._get_response(endpoint, 'get')
+        json_body = next((body for body in response.body if body.mime_type == 'application/json'), None)
+
+        if json_body.schema:
+            result = getJson(json_body.schema)
         else:
-            json = body.example
-        return json.dumps(json)
+            result = json_body.example
+
+        return json.dumps(result)
