@@ -78,6 +78,10 @@ class JsonGenerator:
     def _get_string(self, node):
         min_len = self._default_len_min_string
         max_len = self._default_len_max_string
+
+        if "format" in node:
+            return utils.generate_format_string(node["format"])
+
         if "pattern" in node:
             return rstr.xeger(node['pattern'])
         if "minLength" in node:
